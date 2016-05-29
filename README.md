@@ -29,7 +29,7 @@ Tanto los boletines de problemas como el trabajo práctico están divididos seg�
 * [Boletín C2: Cadenas y Arrays](https://github.com/ruben077/FP1516/blob/master/Enunciados/BC.2%20-%20Cadenas%20y%20Arrays.pdf)
 
 #### C - Trabajo práctico
-* [Boletín T14](https://github.com/ruben077/FP1516/blob/master/Boletines%20-%20Enunciados/T14%20-%20Bolet%C3%ADn%2014.pdf)
+* [Boletín T14](https://github.com/ruben077/FP1516/blob/master/Enunciados/T14%20-%20Bolet%C3%ADn%2014.pdf)
 
 ## License
     Copyright (c) 2016 Rubén Bueno Menéndez
