@@ -1,0 +1,121 @@
+package fp.grados.tipos;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
+import fp.grados.excepciones.ExcepcionPersonaNoValida;
+
+public class PersonaImpl implements Persona {
+	private String nombre;
+	private String apellidos;
+	private String dni;
+	private LocalDate fechaNacimiento;
+	private String email;
+
+	public PersonaImpl(String dni, String nombre, String apellidos, LocalDate fechaNacimiento, String email) {
+		checkDni(dni);
+		checkEmail(email);
+		checkFechaNacimiento(fechaNacimiento);
+		this.dni = dni;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.fechaNacimiento = fechaNacimiento;
+		this.email = email;
+	}
+
+	public PersonaImpl(String dni, String nombre, String apellidos, LocalDate fechaNacimiento) {
+		this(dni, nombre, apellidos, fechaNacimiento, "");
+	}
+
+	private void checkDni(String dni) {
+		boolean esDniCorrecto = checkDniTipoCaracteres(dni) && checkDniLetra(dni);
+		if (!esDniCorrecto) {
+			throw new ExcepcionPersonaNoValida("DNI incorrecto.");
+		}
+	}
+
+	private Boolean checkDniTipoCaracteres(String dni) {
+		return dni.length() == 9 
+				&& Character.isDigit(dni.charAt(0)) 
+				&& Character.isDigit(dni.charAt(1))
+				&& Character.isDigit(dni.charAt(2)) 
+				&& Character.isDigit(dni.charAt(3))
+				&& Character.isDigit(dni.charAt(4)) 
+				&& Character.isDigit(dni.charAt(5))
+				&& Character.isDigit(dni.charAt(6)) 
+				&& Character.isDigit(dni.charAt(7))
+				&& Character.isLetter(dni.charAt(8));
+	}
+
+	private Boolean checkDniLetra(String dni) {
+		String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
+		Integer numeroDni = new Integer(dni.substring(0,8));
+		return dni.charAt(8) == letras.charAt(numeroDni % 23);
+	}
+
+	private void checkEmail(String email) {
+		if (!(email.isEmpty() || email.contains("@"))) {
+			throw new ExcepcionPersonaNoValida("El email debe contener el usuario, una arroba y el servidor.");
+		}
+	}
+
+	private void checkFechaNacimiento(LocalDate fechaNacimiento) {
+		if (!fechaNacimiento.isBefore(LocalDate.now())) {
+			throw new ExcepcionPersonaNoValida("La fecha de nacimiento de una persona debe ser anterior a la fecha actual del sistema.");
+		}
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getApellidos() {
+		return apellidos;
+	}
+
+	public String getDNI() {
+		return dni;
+	}
+
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public Integer getEdad() {
+		Integer edad = (int) getFechaNacimiento().until(LocalDate.now(), ChronoUnit.YEARS);
+		return edad;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public void setApellidos(String apellidos) {
+		this.apellidos = apellidos;
+	}
+
+	public void setDNI(String dni) {
+		checkDni(dni);
+		this.dni = dni;		
+	}
+
+	public void setFechaNacimiento(LocalDate fecha) {
+		checkFechaNacimiento(fecha);
+		this.fechaNacimiento = fecha;
+	}
+
+	public void setEmail(String email) {
+		checkEmail(email);
+		this.email = email;
+	}
+
+	public String toString() {
+		String s = getDNI() + " - " + getApellidos() + ", " + getNombre() + " - " + getFechaNacimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		return s;
+	}
+}

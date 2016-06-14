@@ -1,0 +1,119 @@
+package fp.grados.tipos.test;
+
+import fp.grados.excepciones.ExcepcionEspacioNoValido;
+import fp.grados.tipos.Espacio;
+import fp.grados.tipos.EspacioImpl;
+import fp.grados.tipos.TipoEspacio;
+
+public class TestEspacio {
+	public static void main(String[] args) {
+		testConstructorNormal();
+		testConstructorExcepcional();
+		
+		testSetCapacidadNormal();
+		testSetCapacidadExcepcional();
+		
+		testIgualdad();
+		testOrden();
+	}
+
+	private static void testConstructorNormal() {
+		System.out.println("========Probando el constructor======================================================================================");
+		testConstructor(TipoEspacio.LABORATORIO, "A3.10", 30, 2);
+	}
+	
+	private static void testConstructorExcepcional() {
+		System.out.println("\n========Probando el constructor con capacidad menor que 0======================================================================================");
+		testConstructor(TipoEspacio.LABORATORIO, "A3.10", -10, 2);
+	}
+	
+	private static void testSetCapacidadNormal() {
+		System.out.println("\n========Probando setCapacidad======================================================================================");
+		Espacio es = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 2);
+		testSetCapacidad(es, 20);
+	}
+	
+	private static void testSetCapacidadExcepcional() {
+		System.out.println("\n========Probando setCapacidad con capacidad menor que 0======================================================================================");
+		Espacio es = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 2);
+		testSetCapacidad(es, -10);
+	}
+	
+	private static void testIgualdad() {
+		System.out.println("\n========Probando igualdad con dos objetos iguales======================================================================================");
+		Espacio es1 = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 2);
+		Espacio es2 = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 2);
+		Espacio es3 = new EspacioImpl(TipoEspacio.LABORATORIO, "A4.10", 30, 2);
+		Espacio es4 = new EspacioImpl(TipoEspacio.LABORATORIO, "A5.10", 30, 1);
+		System.out.println("Código hash del objeto es1 (" + es1 + "): " + es1.hashCode());
+		System.out.println("Código hash del objeto es2 (" + es2 + "): " + es2.hashCode());
+		System.out.println("Código hash del objeto es3 (" + es3 + "): " + es3.hashCode());
+		System.out.println("Código hash del objeto es4 (" + es4 + "): " + es4.hashCode());
+		System.out.println("¿Es es1 igual a es2? (debe ser true): " + es1.equals(es2));
+		System.out.println("¿Es es1 distinto de es3? (debe ser true): " + !es1.equals(es3));
+		System.out.println("¿Es es1 distinto de es4? (debe ser true): " + !es1.equals(es4));
+	}
+	
+	private static void testOrden() {
+		System.out.println("\n========Probando orden natural======================================================================================");
+		Espacio menor = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 1);
+		Espacio igual1 = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 2);
+		Espacio igual2 = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 2);
+		Espacio mayor = new EspacioImpl(TipoEspacio.LABORATORIO, "A3.10", 30, 3);
+		System.out.println("- Debe ser ANTES: ");
+		compara(menor, igual1);
+		System.out.println("- Debe ser MISMA POSICIÓN: ");
+		compara(igual1, igual2);
+		System.out.println("- Debe ser DESPUÉS: ");
+		compara(mayor, igual2);
+	}
+	
+	
+	
+	//////////////////////////////////////////////////
+	//Métodos auxiliares
+	
+	private static void testConstructor(TipoEspacio tipo, String nombre, Integer capacidad, Integer planta) {
+		try {
+			Espacio es = new EspacioImpl(tipo, nombre, capacidad, planta);
+			mostrarEspacio(es);
+		} catch (ExcepcionEspacioNoValido e) {
+			System.out.println("Se ha capturado la excepción ExcepcionEspacioNoValido: \n\t" + e.getMessage());
+		} catch (Exception e) {
+			System.out.println("Se ha capturado una excepción insesperada.");
+		}
+	}
+	
+	private static void testSetCapacidad(Espacio es, Integer nuevaCapacidad) {
+		try {
+			System.out.println("La capacidad antes de la operación es: " + es.getCapacidad());
+			System.out.println("La nueva capacidad es: " +  nuevaCapacidad);
+			es.setCapacidad(nuevaCapacidad);
+			System.out.println("La capacidad después de la operación es: " + es.getCapacidad());
+		} catch (ExcepcionEspacioNoValido e) {
+			System.out.println("Se ha capturado la excepción ExcepcionEspacioNoValido: \n\t" + e.getMessage());
+		} catch (Exception e) {
+			System.out.println("Se ha capturado una excepción insesperada.");
+		}
+	}
+	
+	private static void compara(Espacio es1, Espacio es2) {
+		System.out.print("El objeto <" + es1 + ">");
+		if (es1.compareTo(es2) < 0) {
+			System.out.print(" va ANTES que el objeto ");
+		} else if (es1.compareTo(es2) > 0) {
+			System.out.print(" va DESPUÉS que el objeto ");
+		} else {
+			System.out.print(" va en la MISMA POSICIÓN que el objeto ");
+		}
+		System.out.println("<" + es2 + ">");
+	}
+
+	private static void mostrarEspacio(Espacio es) {
+		System.out.println("Espacio--> <" + es + ">");
+		System.out.println("\tTipo de espacio: <" + es.getTipo() + ">");
+		System.out.println("\tNombre: <" + es.getNombre() + ">");
+		System.out.println("\tCapacidad: <" + es.getCapacidad() + ">");
+		System.out.println("\tPlanta: <" + es.getPlanta() + ">");
+	}
+}
