@@ -1,7 +1,7 @@
 #ifndef CADENA_H_
 #define CADENA_H_
 
-#define MAXCAR 257
+#define MAXCAR 256
 
 typedef char Cadena[MAXCAR];
 
